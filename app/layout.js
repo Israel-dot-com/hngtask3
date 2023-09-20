@@ -2,6 +2,7 @@ import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
 import { Inter } from 'next/font/google'
 import NavBar from './components/NavBar'
+import Footer from './components/Footer/page'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -21,7 +22,7 @@ export default function RootLayout({ children }) {
             </div>
           </main> */}
           {children}
-          
+          <Footer />
           </body>
       </html>
     </ClerkProvider>

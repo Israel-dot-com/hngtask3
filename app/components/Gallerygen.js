@@ -1,36 +1,48 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
+import SkeletonLoader from './SkeletonLoader';
+// Array of names and urls
 const finalSpaceCharacters = [
   {
     id: 'gary',
     name: 'Gary Goodspeedo',
-    thumb: 'https://image.tmdb.org/t/p/w500/1E5baAaEse26fej7uHcjOgEE2t2.jpg'
+    thumb: 'https://img.freepik.com/free-photo/what-are-you-waiting-horizontal-shot-frowning-indignant-young-afro-american-male-stylish-eyewear-gesturing-emotionally-expressing-indignation-having-puzzled-look-being-loss_343059-803.jpg?size=626&ext=jpg'
   },
   {
     id: 'cato',
     name: 'Little Cato',
-    thumb: 'https://images.unsplash.com/photo-1617854818583-09e7f077a156?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8dXJsfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60'
+    thumb: 'https://img.freepik.com/free-photo/indifferent-confused-black-woman-spreads-palms-confusingly-has-doubts-wears-green-turtleneck-has-hesitant-face-expression-isolated-pink-space_273609-39143.jpg?size=626&ext=jpg'
   },
   {
     id: 'kvn',
     name: 'KVN',
-    thumb: 'https://images.unsplash.com/photo-1591154669695-5f2a8d20c089?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8dXJsfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60'
+    thumb: 'https://img.freepik.com/free-photo/horizontal-shot-glad-dark-skinned-lady-spreads-palms_273609-28734.jpg?size=626&ext=jpg'
   },
   {
     id: 'mooncake',
     name: 'Mooncakto',
-    thumb: 'https://images.unsplash.com/photo-1584713503693-bb386ec95cf2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fHVybHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60'
+    thumb: 'https://img.freepik.com/free-photo/horizontal-shot-cheerful-mixed-race-two-young-women-point-floor-with-fore-fingers-dressed-casual-outfit_273609-23490.jpg?size=626&ext=jpg'
   },
   {
     id: 'quinn',
     name: 'Quinn Ergon',
-    thumb: 'https://images.unsplash.com/photo-1605496036006-fa36378ca4ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHVybHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60'
+    thumb: 'https://img.freepik.com/free-photo/front-view-smiley-men-contest_23-2149943830.jpg?size=626&ext=jpg'
   }
 ]
 
+// function that checks when page is loaded and slows it down a bit
+
 function App() {
+  const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+    // Simulate fetching gallery data
+    setTimeout(() => {
+      setLoading(false); // Set loading state to false when data is fetched
+    }, 20); // Adjust the delay as needed
+  }, []);
+
   const [characters, updateCharacters] = useState(finalSpaceCharacters);
 
   function handleOnDragEnd(result) {
@@ -44,36 +56,40 @@ function App() {
   }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Final Space Characters</h1>
+    <div className="App px-10">
+    {loading ? (
+      <SkeletonLoader />
+    ): (
+      <header className="">
+        <h1 className='text-center font-medium text-lg py-5'>Feel Free To Re-Arrange</h1>
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <Droppable droppableId="characters">
             {(provided) => (
-              <ul className="characters md:grid grid-cols-2" {...provided.droppableProps} ref={provided.innerRef}>
+              <div className="characters md:grid grid-cols-2 gap-4 pb-20" {...provided.droppableProps} ref={provided.innerRef}>
                 {characters.map(({id, name, thumb}, index) => {
                   return (
                     <Draggable key={id} draggableId={id} index={index}>
                       {(provided) => (
-                        <li className='p-10 object-contain' ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                        <div className='p-4 border border-gray-300 rounded-lg shadow-md' ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
                           <div className="characters-thumb">
-                            <img className='object-contain' src={thumb} />
+                            <img className='aspect-auto object-contain h-32 w-full' src={thumb} />
                           </div>
-                          <p>
+                          <p className='text-center'>
                             { name }
                           </p>
-                        </li>
+                        </div>
                       )}
                     </Draggable>
                   );
                 })}
                 {provided.placeholder}
-              </ul>
+              </div>
             )}
           </Droppable>
         </DragDropContext>
       </header>
-    </div>
+    )}
+  </div>
   );
 }
 
